@@ -67,19 +67,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent dataIntent) {
         super.onActivityResult(requestCode, resultCode, dataIntent);
 
-        // The returned result data is identified by requestCode.
-        // The request code is specified in startActivityForResult(intent, REQUEST_CODE_1); method.
-        switch (requestCode) {
-            // This request code is set by startActivityForResult(intent, REQUEST_CODE_1) method.
-            case REQUEST_CODE_1:
-                if (resultCode == RESULT_OK) {
-                    String information[] = dataIntent.getStringArrayExtra("userInformation");
-//                    tvTest.setText(information[0] + information[1] + information[2] + information[3]);
+        DBHelper db = new DBHelper(MainActivity.this);
 
-                    details.add(new details(information[0], information[1], information[2], information[3]));
-                    aa.notifyDataSetChanged();
-                }
-        }
+        details.clear();
+        details = db.getAllDetails();
+        aa = new ArrayAdapter<details>(MainActivity.this, android.R.layout.simple_expandable_list_item_1, details);
+        lv.setAdapter(aa);
     }
 
     @Override
