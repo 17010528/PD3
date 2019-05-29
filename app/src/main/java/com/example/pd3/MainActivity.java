@@ -21,17 +21,19 @@ public class MainActivity extends AppCompatActivity {
     ListView lv;
     ArrayAdapter aa;
     ArrayList<details> details;
+    ArrayList<allDetails>allDetails;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        DBHelper db = new DBHelper(MainActivity.this);
 
         FloatingActionButton btnAdd = findViewById(R.id.fabAdd);
         lv = this.findViewById(R.id.lv);
 
 
-        details = new ArrayList<details>();
+        details = db.getSomeDetails();
 
         aa = new detailsadapter(this, R.layout.row, details);
         lv.setAdapter(aa);
@@ -51,12 +53,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int
                     position, long identity) {
-                details data = details.get(position);
+                DBHelper db = new DBHelper(MainActivity.this);
+                allDetails = db.getAllDetails(position);
 
                 Intent i = new Intent(MainActivity.this,
                         userinput.class);
-
-                String[] target = {data.getTitle(), data.getDescription(), data.getDate(), data.getTime(), Integer.toString(position)};
+                String[] target = {allDetails.get(position).getTitle(), allDetails.get(position).getDescription(), allDetails.get(position).getDate(), allDetails.get(position).getTime(), Integer.toString(position)};
                 i.putExtra("data", target);
                 startActivityForResult(i, REQUEST_CODE_2);
             }
@@ -70,8 +72,9 @@ public class MainActivity extends AppCompatActivity {
         DBHelper db = new DBHelper(MainActivity.this);
 
         details.clear();
-        details = db.getAllDetails();
-        aa = new ArrayAdapter<details>(MainActivity.this, android.R.layout.simple_expandable_list_item_1, details);
+        details = db.getSomeDetails();
+
+        aa = new detailsadapter(this, R.layout.row, details);
         lv.setAdapter(aa);
     }
 

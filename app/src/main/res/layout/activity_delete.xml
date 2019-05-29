@@ -7,18 +7,50 @@
     android:orientation="vertical"
     tools:context=".delete">
 
-    <EditText
-        android:id="@+id/etTitle"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Enter id"
-        android:inputType="textPersonName" />
+        android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/tvEvents"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Title:\nDate:\nTime:" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <EditText
+                android:id="@+id/etTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Enter id"
+                android:inputType="textPersonName" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnCheck"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Check" />
+
+                <Button
+                    android:id="@+id/btnDelete"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Delete" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvEvents"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Title:\nDate:\nTime:" />
+
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

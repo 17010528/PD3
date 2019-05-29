@@ -13,7 +13,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
 
     private static final String DATABASE_NAME = "events.db";
-    private static final int DATABASE_VER = 10;
+    private static final int DATABASE_VER = 12;
     private static final String TABLE_DETAILS = "events";
     private static final String COLUMN_ID = "_id";
     private static final String COLUMN_TITLE = "title";
@@ -32,7 +32,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 + COLUMN_TITLE + " TEXT,"
                 + COLUMN_DESCRIPTION + " TEXT,"
                 + COLUMN_DATE + " TEXT,"
-                + COLUMN_TIME + "TEXT)";
+                + COLUMN_TIME + " TEXT)";
         db.execSQL(createTableSql);
         Log.i("info" ,"created tables");
     }
@@ -69,13 +69,45 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
 
-    public ArrayList<deleteDetails> getDeleteDetails() {
-        ArrayList<deleteDetails> deleteDetails = new ArrayList<deleteDetails>();
-
+    public String getDeleteDetails(String name) {
 
         SQLiteDatabase db = this.getReadableDatabase();
-        String[] columns = {COLUMN_ID , COLUMN_TITLE , COLUMN_DESCRIPTION};
+        String msg = "";
+        String condition = "title = ?";
+        String[] args = {name};
+        int result = db.delete("events" , condition, args);
+        if(result==-1){
+            msg = "unsuccessful";
+        }else{
+            msg = "successful";
+        }
+        return msg;
+    }
 
+    public ArrayList<details> getSomeDetails(){
+        ArrayList<details> details = new ArrayList<details>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        String[] columns = {COLUMN_TITLE  , COLUMN_DATE , COLUMN_TIME};
+        Cursor cursor = db.query(TABLE_DETAILS , columns , null , null ,null , null, null, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                String title= cursor.getString(0);
+                String date = cursor.getString(1);
+                String time = cursor.getString(2);
+                details obj = new details(title, date , time);
+                details.add(obj);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return details;
+    }
+
+    public ArrayList<allDetails> getAllDetails(int position){
+        ArrayList<allDetails> allDetails = new ArrayList<allDetails>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        String[] columns = {COLUMN_ID , COLUMN_TITLE  , COLUMN_DESCRIPTION, COLUMN_DATE , COLUMN_TIME};
         Cursor cursor = db.query(TABLE_DETAILS , columns , null , null ,null , null, null, null);
 
         if (cursor.moveToFirst()) {
@@ -83,34 +115,15 @@ public class DBHelper extends SQLiteOpenHelper {
                 int id = cursor.getInt(0);
                 String title= cursor.getString(1);
                 String description = cursor.getString(2);
-                deleteDetails obj = new deleteDetails(id,title,description);
-                deleteDetails.add(obj);
-            } while (cursor.moveToNext());
-        }
-        cursor.close();
-        db.close();
-        return deleteDetails;
-    }
-
-    public ArrayList<details> getAllDetails(){
-        ArrayList<details> details = new ArrayList<details>();
-        SQLiteDatabase db = this.getReadableDatabase();
-        String[] columns = {COLUMN_TITLE , COLUMN_DESCRIPTION , COLUMN_DATE , COLUMN_TIME};
-        Cursor cursor = db.query(TABLE_DETAILS , columns , null , null ,null , null, null, null);
-
-        if (cursor.moveToFirst()) {
-            do {
-                String title= cursor.getString(1);
-                String description = cursor.getString(2);
                 String date = cursor.getString(3);
                 String time = cursor.getString(4);
-                details obj = new details(title, description, date , time);
-                details.add(obj);
+                allDetails obj = new allDetails(id,title,description, date , time);
+                allDetails.add(obj);
             } while (cursor.moveToNext());
         }
         cursor.close();
         db.close();
-        return details;
+        return allDetails;
     }
 
 }

@@ -16,6 +16,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -181,6 +182,7 @@ public class userinput extends AppCompatActivity {
                 description = ETdescription.getText().toString();
                 date = day + "/" + month + "/" + year;
                 DBHelper dbh = new DBHelper(userinput.this);
+                Log.e("Zeno :" , title + description + date+ time);
                 dbh.insertDetails(title, description, date, time);
                 dbh.close();
 
