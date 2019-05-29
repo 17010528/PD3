@@ -1,7 +1,5 @@
 package com.example.pd3;
 
-import android.app.AlertDialog;
-import android.app.DatePickerDialog;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,17 +9,17 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class detailsadapter extends ArrayAdapter<details> {
-    private ArrayList<details> details;
+public class deleteAdapter extends ArrayAdapter<deleteDetails> {
+    private ArrayList<deleteDetails> deleteDetails;
     private Context context;
-    private TextView tvTitle , tvDatenTime;
+    private TextView tvID , tvDateAndTime;
 
 
 
-    public detailsadapter(Context context, int resource, ArrayList<details> objects){
+    public deleteAdapter(Context context, int resource, ArrayList<deleteDetails> objects){
         super(context, resource, objects);
         // Store the food that is passed to this adapter
-        details = objects;
+        deleteDetails = objects;
         // Store Context object as we would need to use it later
         this.context = context;
     }
@@ -35,19 +33,19 @@ public class detailsadapter extends ArrayAdapter<details> {
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         // "Inflate" the row.xml as the layout for the View object
-        View rowView = inflater.inflate(R.layout.row, parent, false);
+        View rowView = inflater.inflate(R.layout.rowdelete, parent, false);
 
         // Get the TextView object
-        tvTitle= rowView.findViewById(R.id.textViewTitle);
+        tvID= rowView.findViewById(R.id.tvID);
         // Get the ImageView object
-        tvDatenTime = rowView.findViewById(R.id.textViewDatenTime);
+        tvDateAndTime = rowView.findViewById(R.id.tvDateAndTime);
 
         // The parameter "position" is the index of the
         //  row ListView is requesting.
         //  We get back the food at the same index.
-        details currentDetails = details.get(position);
-        tvTitle.setText("Title:" +currentDetails.getTitle());
-        tvDatenTime.setText("Time:"+currentDetails.getTime()+"\nDate:" +currentDetails.getDate());
+        deleteDetails currentDelete = deleteDetails.get(position);
+        tvID.setText("ID:"+Integer.toString(currentDelete.getId()));
+        tvDateAndTime.setText("Time:"+currentDelete.getTime()+"\nDate:" +currentDelete.getDate());
 
         return rowView;
     }

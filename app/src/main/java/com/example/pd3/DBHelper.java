@@ -69,13 +69,13 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
 
-    public String getDeleteDetails(String name) {
+    public String getDeleteDetails(int id) {
 
         SQLiteDatabase db = this.getReadableDatabase();
         String msg = "";
-        String condition = "title = ?";
-        String[] args = {name};
-        int result = db.delete("events" , condition, args);
+        String condition = COLUMN_ID + "= ?";
+        String[] args = {String.valueOf(id)};
+        int result = db.delete(TABLE_DETAILS, condition, args);
         if(result==-1){
             msg = "unsuccessful";
         }else{
@@ -84,11 +84,35 @@ public class DBHelper extends SQLiteOpenHelper {
         return msg;
     }
 
+
+    public ArrayList<deleteDetails> getDelete()
+    {
+        ArrayList<deleteDetails> deleteDetails = new ArrayList<deleteDetails>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        String[] columns = {COLUMN_ID  , COLUMN_DATE , COLUMN_TIME};
+
+        Cursor cursor = db.query(TABLE_DETAILS , columns , null , null , null, null ,null  ,null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                int id = cursor.getInt(0);
+                String date = cursor.getString(1);
+                String time = cursor.getString(2);
+                deleteDetails obj = new deleteDetails(id, date , time);
+                deleteDetails.add(obj);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return deleteDetails;
+    }
+
+
     public ArrayList<details> getSomeDetails(){
         ArrayList<details> details = new ArrayList<details>();
         SQLiteDatabase db = this.getReadableDatabase();
         String[] columns = {COLUMN_TITLE  , COLUMN_DATE , COLUMN_TIME};
-        Cursor cursor = db.query(TABLE_DETAILS , columns , null , null ,null , null, null, null);
+        Cursor cursor = db.query(TABLE_DETAILS , columns , null , null ,COLUMN_ID , null, null, null);
 
         if (cursor.moveToFirst()) {
             do {

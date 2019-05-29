@@ -7,50 +7,30 @@
     android:orientation="vertical"
     tools:context=".delete">
 
-    <ScrollView
+    <EditText
+        android:id="@+id/etTitle"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:hint="Enter id"
+        android:inputType="textPersonName" />
 
-        <LinearLayout
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnDelete"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:backgroundTint="@android:color/holo_red_light"
+            android:textColor="@android:color/white"
+            android:text="Delete" />
+    </LinearLayout>
 
-            <EditText
-                android:id="@+id/etTitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="Enter id"
-                android:inputType="textPersonName" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/btnCheck"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Check" />
-
-                <Button
-                    android:id="@+id/btnDelete"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Delete" />
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/tvEvents"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Title:\nDate:\nTime:" />
-
-        </LinearLayout>
-    </ScrollView>
+    <ListView
+        android:id="@+id/lvDelete"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </LinearLayout>

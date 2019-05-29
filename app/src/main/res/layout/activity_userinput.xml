@@ -19,12 +19,15 @@
             android:layout_height="wrap_content"
             android:text="Title" />
 
-        <EditText
+
+        <android.support.design.widget.TextInputEditText
             android:id="@+id/editTextTitle"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="textPersonName" />
+            android:layout_height="wrap_content"/>
+
+
+
+
     </LinearLayout>
 
     <LinearLayout
@@ -37,15 +40,21 @@
             android:id="@+id/textView2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+
             android:text="Description" />
 
-        <EditText
-            android:id="@+id/editTextDescription"
+        <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:gravity="start|top"
-            android:inputType="textMultiLine" />
+            app:counterEnabled="true"
+            app:counterOverflowTextAppearance="@style/TextLimitError">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/editTextDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        </android.support.design.widget.TextInputLayout>
     </LinearLayout>
 
     <LinearLayout
@@ -58,6 +67,8 @@
             android:id="@+id/buttonDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:backgroundTint="@android:color/holo_red_light"
+            android:textColor="@android:color/white"
             android:text="Date" />
 
         <TextView
@@ -78,6 +89,8 @@
             android:id="@+id/buttonTime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:backgroundTint="@android:color/holo_red_light"
+            android:textColor="@android:color/white"
             android:text="Time" />
 
         <TextView
@@ -91,8 +104,10 @@
     <Button
         android:id="@+id/buttonSubmit"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_weight="1"
-        android:text="Finished" />
+        android:backgroundTint="@android:color/holo_blue_light"
+        android:text="Finished"
+        android:textColor="@android:color/white" />
 
 </LinearLayout>

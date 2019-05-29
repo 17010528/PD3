@@ -32,7 +32,6 @@ import java.util.Calendar;
 
 public class userinput extends AppCompatActivity {
 
-    private NotificationManagerCompat notificationManager;
 
     DatePickerDialog dpd;
     int day = 0;
@@ -56,17 +55,17 @@ public class userinput extends AppCompatActivity {
     String time = "";
     EditText ETdescription, ETtitle;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_userinput);
 
+        setTitle("Add Events");
 
         Button buttonDate = findViewById(R.id.buttonDate);
         Button buttonTime = findViewById(R.id.buttonTime);
         Button buttonSubmit = findViewById(R.id.buttonSubmit);
-
-//        notificationManager = NotificationManagerCompat.from(this);
 
 
         final TextView showTime = findViewById(R.id.textViewTime);
@@ -199,7 +198,8 @@ public class userinput extends AppCompatActivity {
                 cal.add(Calendar.MINUTE,reminder);
 
                 Intent intent = new Intent(userinput.this, NotificationReceiver.class);
-                intent.putExtra("name", title);
+                String[] name = {title , description};
+                intent.putExtra("name", name);
 
                 PendingIntent pendingIntent = PendingIntent.getBroadcast(userinput.this, reqCode, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 
@@ -217,6 +217,7 @@ public class userinput extends AppCompatActivity {
 //                }
             }
         });
+
     }
 
 //    public void sendChannel1(View v) {

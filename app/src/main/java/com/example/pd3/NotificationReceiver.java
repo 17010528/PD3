@@ -17,11 +17,11 @@ import android.util.Log;
 import static android.content.Context.NOTIFICATION_SERVICE;
 
 public class NotificationReceiver extends BroadcastReceiver {
-    int reqCode = 12345;
+
+     int reqCode = 12345;
+
     @Override
     public void onReceive(Context context, Intent intent) {
-        // TODO: This method is called when the BroadcastReceiver is receiving
-        // an Intent broadcast.
         NotificationManager notificationManager = (NotificationManager)
                 context.getSystemService(NOTIFICATION_SERVICE);
 
@@ -36,16 +36,16 @@ public class NotificationReceiver extends BroadcastReceiver {
         PendingIntent pIntent = PendingIntent.getActivity(context, reqCode, i, PendingIntent.FLAG_CANCEL_CURRENT);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "default");
-        builder.setContentTitle("Task Manager Reminder");
+        builder.setContentTitle("Event Reminder");
 
-        String name = intent.getStringExtra("name");
-        builder.setContentText(name);
+        String[] name = intent.getStringArrayExtra("name");
+        builder.setContentText(name[0]);
 
-        Log.e("name", name);
 
-        builder.setSmallIcon(android.R.drawable.ic_dialog_info);
+        builder.setSmallIcon(R.drawable.notifications);
         builder.setContentIntent(pIntent);
         builder.setAutoCancel(true);
+        builder.setStyle(new NotificationCompat.BigTextStyle().bigText(name[0] + "\n"+name[1]));
 
         builder.setLights(Color.WHITE, 500, 500);
 

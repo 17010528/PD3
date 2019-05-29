@@ -27,11 +27,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        setTitle("View Events");
+
         DBHelper db = new DBHelper(MainActivity.this);
 
         FloatingActionButton btnAdd = findViewById(R.id.fabAdd);
         lv = this.findViewById(R.id.lv);
-
 
         details = db.getSomeDetails();
 
