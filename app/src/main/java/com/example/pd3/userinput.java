@@ -182,6 +182,7 @@ public class userinput extends AppCompatActivity {
                 date = day + "/" + month + "/" + year;
                 DBHelper dbh = new DBHelper(userinput.this);
                 dbh.insertDetails(title, description, date, time);
+                dbh.close();
 
 
 
