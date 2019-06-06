@@ -13,7 +13,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
 
     private static final String DATABASE_NAME = "events.db";
-    private static final int DATABASE_VER = 12;
+    private static final int DATABASE_VER = 17;
     private static final String TABLE_DETAILS = "events";
     private static final String COLUMN_ID = "_id";
     private static final String COLUMN_TITLE = "title";
@@ -82,6 +82,24 @@ public class DBHelper extends SQLiteOpenHelper {
             msg = "successful";
         }
         return msg;
+    }
+
+
+    public void updateEvent(int id , String title, String description , String date , String time){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_TITLE, title);
+        values.put(COLUMN_DESCRIPTION , description);
+        values.put(COLUMN_DATE, date);
+        values.put(COLUMN_TIME ,time);
+
+        int result = db.update(TABLE_DETAILS, values, "_id="+id, null);
+        if (result == -1){
+            Log.d("DBHelper", "Update failed");
+        }
+
+        db.close();
+
     }
 
 

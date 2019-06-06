@@ -9,7 +9,7 @@ public class details implements Serializable {
 
 
 
-    public details(String title, String time, String date) {
+    public details(String title, String date, String time) {
 
         this.title = title;
         this.time = time;

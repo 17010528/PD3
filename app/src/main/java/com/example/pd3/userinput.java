@@ -45,16 +45,18 @@ public class userinput extends AppCompatActivity {
     int userSelectedDay = 0;
     int userSelectedMonth = 0;
     int userSelectedYear = 0;
-
+    int id = 0;
     int reqCode = 12345;
-
+    int position = 0;
 
     String title = "";
     String description = "";
     String date = "";
     String time = "";
+    String option = "";
     EditText ETdescription, ETtitle;
 
+    ArrayList<allDetails>allDetails;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +67,8 @@ public class userinput extends AppCompatActivity {
 
         Button buttonDate = findViewById(R.id.buttonDate);
         Button buttonTime = findViewById(R.id.buttonTime);
-        Button buttonSubmit = findViewById(R.id.buttonSubmit);
+        Button btnAdd = findViewById(R.id.buttonSubmit);
+        Button btnUpdate = findViewById(R.id.btnUpdate);
 
 
         final TextView showTime = findViewById(R.id.textViewTime);
@@ -73,7 +76,7 @@ public class userinput extends AppCompatActivity {
 
         ETdescription = findViewById(R.id.editTextDescription);
         ETtitle = findViewById(R.id.editTextTitle);
-
+        btnUpdate.setVisibility(View.GONE);
 
         Intent intent = getIntent();
         final String[] target = intent.getStringArrayExtra("data");
@@ -81,26 +84,37 @@ public class userinput extends AppCompatActivity {
         description = target[1];
         date = target[3];
         time = target[2];
+        position = Integer.parseInt(target[5]);
+
+        option = target[4];
+
         if(!title.equals("")&& !date.equals("") && !time.equals("") && !description.equals("")) {
-
             ETtitle.setText(title);
-            ETtitle.setEnabled(false);
-            ETtitle.setTypeface(null , Typeface.BOLD_ITALIC);
-
-            buttonDate.setEnabled(false);
-            buttonTime.setEnabled(false);
-            buttonSubmit.setVisibility(View.INVISIBLE);
-
-
             ETdescription.setText(description);
-            ETdescription.setEnabled(false);
-            ETdescription.setTypeface(null , Typeface.BOLD_ITALIC);
-
-            showTime.setText("Time selected-" + time);
-            showTime.setTypeface(null , Typeface.BOLD_ITALIC);
-
+            showTime.setText("Time selected - " + time);
             showDate.setText("Date selected-" + date);
-            showDate.setTypeface(null , Typeface.BOLD_ITALIC);
+            if(option.equalsIgnoreCase("edit")){
+                btnUpdate.setVisibility(View.VISIBLE);
+                btnAdd.setVisibility(View.GONE);
+            }else {
+
+                ETtitle.setEnabled(false);
+                ETtitle.setTypeface(null);
+
+                buttonDate.setEnabled(false);
+                buttonTime.setEnabled(false);
+                btnAdd.setVisibility(View.GONE);
+
+
+                ETdescription.setEnabled(false);
+                ETdescription.setTypeface(null);
+
+
+                showTime.setTypeface(null);
+
+
+                showDate.setTypeface(null);
+            }
 
         }
 
@@ -119,7 +133,7 @@ public class userinput extends AppCompatActivity {
                         userSelectedDay = dayOfMonth;
                         userSelectedHour = month;
                         userSelectedYear = year;
-                        showDate.setText("Date selected-" + dayOfMonth + "/" + month + "/" + year);
+                        showDate.setText("Date selected : " + dayOfMonth + "/" + month + "/" + year);
                     }
                 }, day, month, year);
                 dpd.getDatePicker().setMinDate(System.currentTimeMillis());
@@ -145,21 +159,21 @@ public class userinput extends AppCompatActivity {
 
                         if(selectedHour<10){
                             if(selectedMinute<10){
-                                showTime.setText("Time selected-0"+selectedHour + ":0" + selectedMinute);
+                                showTime.setText("Time selected : 0"+selectedHour + ":0" + selectedMinute);
                                 time = "0"+selectedHour + ":0" + selectedMinute;
                             }else{
-                                showTime.setText("Time selected-0"+selectedHour + ":"+selectedMinute);
+                                showTime.setText("Time selected : 0"+selectedHour + ":"+selectedMinute);
                                 time = "0"+selectedHour + ":" + selectedMinute;
 
 
                             }
                         }else{
                             if(selectedMinute<10){
-                                showTime.setText("Time selected-"+selectedHour + ":0" + selectedMinute);
+                                showTime.setText("Time selected : "+selectedHour + ":0" + selectedMinute);
                                 time = selectedHour + ":0" + selectedMinute;
 
                             }else{
-                                showTime.setText("Time selected-"+selectedHour +":"+ selectedMinute);
+                                showTime.setText("Time selected : "+selectedHour +":"+ selectedMinute);
                                 time = selectedHour + ":" + selectedMinute;
 
 
@@ -173,7 +187,7 @@ public class userinput extends AppCompatActivity {
 
             }
         });
-        buttonSubmit.setOnClickListener(new View.OnClickListener() {
+        btnAdd.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -181,7 +195,6 @@ public class userinput extends AppCompatActivity {
                 description = ETdescription.getText().toString();
                 date = day + "/" + month + "/" + year;
                 DBHelper dbh = new DBHelper(userinput.this);
-                Log.e("Zeno :" , title + description + date+ time);
                 dbh.insertDetails(title, description, date, time);
                 dbh.close();
 
@@ -218,6 +231,53 @@ public class userinput extends AppCompatActivity {
             }
         });
 
+        btnUpdate.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                DBHelper db = new DBHelper(userinput.this);
+                allDetails = db.getAllDetails(position);
+                title = ETtitle.getText().toString();
+                description = ETdescription.getText().toString();
+                date = day + "/" + month + "/" + year;
+                int id = allDetails.get(position).getId();
+
+
+                db.updateEvent(id , title , description , date, time);
+                db.close();
+
+
+
+                hour = hour*60 ;
+                day = userSelectedDay - day ;
+
+                int reminderTime = (userSelectedHour*60 + userSelectedMinute) - (hour + minute);
+                int reminderDate = day * 1440;
+                int reminder = reminderTime + reminderDate;
+
+                Calendar cal = Calendar.getInstance();
+                cal.add(Calendar.MINUTE,reminder);
+
+                Intent intent = new Intent(userinput.this, NotificationReceiver.class);
+                String[] name = {title , description};
+                intent.putExtra("name", name);
+
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(userinput.this, reqCode, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+                AlarmManager am = (AlarmManager)getSystemService(Activity.ALARM_SERVICE);
+                am.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
+                if (day<1) {
+                    Toast.makeText(userinput.this, "Event in " + reminderTime + "minute(s)",
+                            Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(userinput.this, "Event in " + day + "day(s)"+reminderTime + " minute(s)",
+                            Toast.LENGTH_SHORT).show();
+                }
+
+                finish();
+//                }
+            }
+        });
     }
 
 //    public void sendChannel1(View v) {

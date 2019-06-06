@@ -12,7 +12,14 @@ public class allDetails implements Serializable {
 
 
     public allDetails(int id, String title, String description, String date , String time) {
-        this.id =id;
+        this.id = id;
+        this.title = title;
+        this.time = time;
+        this.date = date;
+        this.description = description;
+    }
+
+    public void setAllDetails(String title, String description , String date , String time){
         this.title = title;
         this.time = time;
         this.date = date;
@@ -38,6 +45,8 @@ public class allDetails implements Serializable {
     public String getDate() {
         return date;
     }
+
+
 
 
 }
