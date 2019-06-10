@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<details> details;
     ArrayList<allDetails>allDetails;
     AlertDialog levelDialog;
+    int items1 = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,19 +77,14 @@ public class MainActivity extends AppCompatActivity {
                 builder.setSingleChoiceItems(items, -1, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int item) {
 
+                            items1 = item;
 
-                        if(item == 2) {
-                            DBHelper db = new DBHelper(MainActivity.this);
-                            allDetails = db.getAllDetails(pos);
-
-                            Intent i = new Intent(MainActivity.this,
-                                    userinput.class);
-                            String[] target = {allDetails.get(pos).getTitle(), allDetails.get(pos).getDescription(), allDetails.get(pos).getDate(), allDetails.get(pos).getTime(), items[2] , Integer.toString(pos)};
-                            i.putExtra("data", target);
-                            startActivityForResult(i, REQUEST_CODE_2);
-
-                        }else if(item == 1){
-
+                    }
+                });
+                builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if(items1 == 1){
                             DBHelper db = new DBHelper(MainActivity.this);
                             allDetails = db.getAllDetails(pos);
                             int id = allDetails.get(pos).getId();
@@ -104,6 +100,16 @@ public class MainActivity extends AppCompatActivity {
                             aa = new detailsadapter(MainActivity.this, R.layout.row, details);
                             lv.setAdapter(aa);
 
+                        }else if(items1 == 2){
+                            DBHelper db = new DBHelper(MainActivity.this);
+                            allDetails = db.getAllDetails(pos);
+
+                            Intent i = new Intent(MainActivity.this,
+                                    userinput.class);
+                            String[] target = {allDetails.get(pos).getTitle(), allDetails.get(pos).getDescription(), allDetails.get(pos).getDate(), allDetails.get(pos).getTime(), items[2] , Integer.toString(pos)};
+                            i.putExtra("data", target);
+                            startActivityForResult(i, REQUEST_CODE_2);
+
                         }else{
                             DBHelper db = new DBHelper(MainActivity.this);
                             allDetails = db.getAllDetails(pos);
@@ -113,9 +119,8 @@ public class MainActivity extends AppCompatActivity {
                             String[] target = {allDetails.get(pos).getTitle(), allDetails.get(pos).getDescription(), allDetails.get(pos).getDate(), allDetails.get(pos).getTime(), items[0], Integer.toString(pos)};
                             i.putExtra("data", target);
                             startActivityForResult(i, REQUEST_CODE_2);
-                        }
 
-                         levelDialog.dismiss();
+                        }
                     }
                 });
 

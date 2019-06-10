@@ -193,41 +193,54 @@ public class userinput extends AppCompatActivity {
             public void onClick(View v) {
                 title = ETtitle.getText().toString();
                 description = ETdescription.getText().toString();
-                date = day + "/" + month + "/" + year;
-                DBHelper dbh = new DBHelper(userinput.this);
-                dbh.insertDetails(title, description, date, time);
-                dbh.close();
+                if (title.equalsIgnoreCase("")) {
+
+                    ETtitle.setError("Title is required!");
+
+                }else if(day ==0) {
+
+                    showDate.setError("Date is required!");
+
+                }else if(time.equalsIgnoreCase("")){
+
+                    showTime.setError("Time is required!");
+
+                } else {
+                    date = day + "/" + month + "/" + year;
+                    DBHelper dbh = new DBHelper(userinput.this);
+                    dbh.insertDetails(title, description, date, time);
+                    dbh.close();
 
 
+                    hour = hour * 60;
+                    day = userSelectedDay - day;
 
-                hour = hour*60 ;
-                day = userSelectedDay - day ;
+                    int reminderTime = (userSelectedHour * 60 + userSelectedMinute) - (hour + minute);
+                    int reminderDate = day * 1440;
+                    int reminder = reminderTime + reminderDate;
 
-                int reminderTime = (userSelectedHour*60 + userSelectedMinute) - (hour + minute);
-                int reminderDate = day * 1440;
-                int reminder = reminderTime + reminderDate;
+                    Calendar cal = Calendar.getInstance();
+                    cal.add(Calendar.MINUTE, reminder);
 
-                Calendar cal = Calendar.getInstance();
-                cal.add(Calendar.MINUTE,reminder);
+                    Intent intent = new Intent(userinput.this, NotificationReceiver.class);
+                    String[] name = {title, description};
+                    intent.putExtra("name", name);
 
-                Intent intent = new Intent(userinput.this, NotificationReceiver.class);
-                String[] name = {title , description};
-                intent.putExtra("name", name);
+                    PendingIntent pendingIntent = PendingIntent.getBroadcast(userinput.this, reqCode, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 
-                PendingIntent pendingIntent = PendingIntent.getBroadcast(userinput.this, reqCode, intent, PendingIntent.FLAG_CANCEL_CURRENT);
-
-                AlarmManager am = (AlarmManager)getSystemService(Activity.ALARM_SERVICE);
-                am.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
-                if (day<1) {
-                    Toast.makeText(userinput.this, "Event in " + reminderTime + "minute(s)",
-                            Toast.LENGTH_SHORT).show();
-                }else{
-                    Toast.makeText(userinput.this, "Event in " + day + "day(s)"+reminderTime + " minute(s)",
-                            Toast.LENGTH_SHORT).show();
-                }
+                    AlarmManager am = (AlarmManager) getSystemService(Activity.ALARM_SERVICE);
+                    am.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
+                    if (day < 1) {
+                        Toast.makeText(userinput.this, "Event in " + reminderTime + "minute(s)",
+                                Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(userinput.this, "Event in " + day + "day(s)" + reminderTime + " minute(s)",
+                                Toast.LENGTH_SHORT).show();
+                    }
 
                     finish();
 //                }
+                }
             }
         });
 
