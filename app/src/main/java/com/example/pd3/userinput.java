@@ -43,9 +43,7 @@ public class userinput extends AppCompatActivity {
     int userSelectedHour = 0;
     int userSelectedMinute = 0;
     int userSelectedDay = 0;
-    int userSelectedMonth = 0;
     int userSelectedYear = 0;
-    int id = 0;
     int reqCode = 12345;
     int position = 0;
 
@@ -82,8 +80,8 @@ public class userinput extends AppCompatActivity {
         final String[] target = intent.getStringArrayExtra("data");
         title = target[0];
         description = target[1];
-        date = target[3];
-        time = target[2];
+        date = target[2];
+        time = target[3];
         position = Integer.parseInt(target[5]);
 
         option = target[4];
@@ -92,7 +90,7 @@ public class userinput extends AppCompatActivity {
             ETtitle.setText(title);
             ETdescription.setText(description);
             showTime.setText("Time selected - " + time);
-            showDate.setText("Date selected-" + date);
+            showDate.setText("Date selected - " + date);
             if(option.equalsIgnoreCase("edit")){
                 btnUpdate.setVisibility(View.VISIBLE);
                 btnAdd.setVisibility(View.GONE);
@@ -193,11 +191,13 @@ public class userinput extends AppCompatActivity {
             public void onClick(View v) {
                 title = ETtitle.getText().toString();
                 description = ETdescription.getText().toString();
+                String date1 = showDate.getText().toString();
+
                 if (title.equalsIgnoreCase("")) {
 
                     ETtitle.setError("Title is required!");
 
-                }else if(day ==0) {
+                }else if(date1.equals("")) {
 
                     showDate.setError("Date is required!");
 

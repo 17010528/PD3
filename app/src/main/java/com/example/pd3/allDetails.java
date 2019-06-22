@@ -19,12 +19,7 @@ public class allDetails implements Serializable {
         this.description = description;
     }
 
-    public void setAllDetails(String title, String description , String date , String time){
-        this.title = title;
-        this.time = time;
-        this.date = date;
-        this.description = description;
-    }
+
 
     public String getTitle() {
         return title;

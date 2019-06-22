@@ -20,7 +20,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
     private final static int REQUEST_CODE_1 = 1;
     private final static int REQUEST_CODE_2 = 2;
-    final String[] items = {"Edit","Delete","View"};
+    final String[] items = {"Edit","Delete"};
     ListView lv;
     ArrayAdapter aa;
     ArrayList<details> details;
@@ -59,6 +59,22 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                DBHelper db = new DBHelper(MainActivity.this);
+                allDetails = db.getAllDetails(position);
+
+                Intent i = new Intent(MainActivity.this,
+                        userinput.class);
+                String[] target = {allDetails.get(position).getTitle(), allDetails.get(position).getDescription(), allDetails.get(position).getDate(), allDetails.get(position).getTime(), "View" , Integer.toString(position)};
+                i.putExtra("data", target);
+                startActivityForResult(i, REQUEST_CODE_2);
+            }
+        });
+
+
         lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
@@ -81,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
 
                     }
                 });
+
                 builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -100,17 +117,8 @@ public class MainActivity extends AppCompatActivity {
                             aa = new detailsadapter(MainActivity.this, R.layout.row, details);
                             lv.setAdapter(aa);
 
-                        }else if(items1 == 2){
-                            DBHelper db = new DBHelper(MainActivity.this);
-                            allDetails = db.getAllDetails(pos);
 
-                            Intent i = new Intent(MainActivity.this,
-                                    userinput.class);
-                            String[] target = {allDetails.get(pos).getTitle(), allDetails.get(pos).getDescription(), allDetails.get(pos).getDate(), allDetails.get(pos).getTime(), items[2] , Integer.toString(pos)};
-                            i.putExtra("data", target);
-                            startActivityForResult(i, REQUEST_CODE_2);
-
-                        }else{
+                        }else if(items1 == 0){
                             DBHelper db = new DBHelper(MainActivity.this);
                             allDetails = db.getAllDetails(pos);
 
